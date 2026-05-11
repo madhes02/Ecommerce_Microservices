@@ -1,0 +1,15 @@
+/workspaces/Ecommerce_Microservices/user-service/src/main/java/com/deloitte/user_service/UserServiceApplication.java
+/workspaces/Ecommerce_Microservices/user-service/src/main/java/com/deloitte/user_service/controller/AuthController.java
+/workspaces/Ecommerce_Microservices/user-service/src/main/java/com/deloitte/user_service/dto/request/LoginRequestDTO.java
+/workspaces/Ecommerce_Microservices/user-service/src/main/java/com/deloitte/user_service/dto/request/RegisterRequestDTO.java
+/workspaces/Ecommerce_Microservices/user-service/src/main/java/com/deloitte/user_service/dto/response/UserResponseDTO.java
+/workspaces/Ecommerce_Microservices/user-service/src/main/java/com/deloitte/user_service/entity/Role.java
+/workspaces/Ecommerce_Microservices/user-service/src/main/java/com/deloitte/user_service/entity/User.java
+/workspaces/Ecommerce_Microservices/user-service/src/main/java/com/deloitte/user_service/exception/AuthException.java
+/workspaces/Ecommerce_Microservices/user-service/src/main/java/com/deloitte/user_service/exception/GlobalExceptionHandler.java
+/workspaces/Ecommerce_Microservices/user-service/src/main/java/com/deloitte/user_service/repository/UserRepository.java
+/workspaces/Ecommerce_Microservices/user-service/src/main/java/com/deloitte/user_service/security/CustomUserDetailsService.java
+/workspaces/Ecommerce_Microservices/user-service/src/main/java/com/deloitte/user_service/security/JwtAuthFilter.java
+/workspaces/Ecommerce_Microservices/user-service/src/main/java/com/deloitte/user_service/security/JwtService.java
+/workspaces/Ecommerce_Microservices/user-service/src/main/java/com/deloitte/user_service/security/SecurityConfig.java
+/workspaces/Ecommerce_Microservices/user-service/src/main/java/com/deloitte/user_service/service/UserService.java

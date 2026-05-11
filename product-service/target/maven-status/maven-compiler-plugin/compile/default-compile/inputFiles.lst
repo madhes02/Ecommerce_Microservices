@@ -1,0 +1,9 @@
+/workspaces/Ecommerce_Microservices/product-service/src/main/java/com/deloitte/product_service/ProductServiceApplication.java
+/workspaces/Ecommerce_Microservices/product-service/src/main/java/com/deloitte/product_service/controller/ProductController.java
+/workspaces/Ecommerce_Microservices/product-service/src/main/java/com/deloitte/product_service/dto/request/ProductRequestDTO.java
+/workspaces/Ecommerce_Microservices/product-service/src/main/java/com/deloitte/product_service/dto/response/ProductResponseDTO.java
+/workspaces/Ecommerce_Microservices/product-service/src/main/java/com/deloitte/product_service/entity/Product.java
+/workspaces/Ecommerce_Microservices/product-service/src/main/java/com/deloitte/product_service/exception/GlobalExceptionHandler.java
+/workspaces/Ecommerce_Microservices/product-service/src/main/java/com/deloitte/product_service/exception/ResourceNotFoundException.java
+/workspaces/Ecommerce_Microservices/product-service/src/main/java/com/deloitte/product_service/repository/ProductRepository.java
+/workspaces/Ecommerce_Microservices/product-service/src/main/java/com/deloitte/product_service/service/ProductService.java

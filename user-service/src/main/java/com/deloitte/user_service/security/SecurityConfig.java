@@ -28,19 +28,6 @@ public class SecurityConfig {
     private final UserRepository userRepository;
 
     @Bean
-    public UserDetailsService userDetailsService() {
-        return username -> {
-            var user = userRepository.findByUsername(username)
-                    .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
-            return org.springframework.security.core.userdetails.User
-                    .withUsername(user.getUsername())
-                    .password(user.getPassword())
-                    .authorities(List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name())))
-                    .build();
-        };
-    }
-
-    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
