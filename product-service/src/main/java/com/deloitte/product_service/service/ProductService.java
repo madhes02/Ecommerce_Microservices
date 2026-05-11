@@ -42,7 +42,7 @@ public class ProductService {
     }
 
     public List<ProductResponseDTO> getAllProducts() {
-         return productRepository.findAll().stream()
+        return productRepository.findAll().stream()
                 .map(this::mapToDTO).collect(Collectors.toList());
     }
 
@@ -76,12 +76,12 @@ public class ProductService {
     public void reduceStock(Long productId, Integer quantity) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with ID: " + productId));
-            if (product.getStock() < quantity) {
-                throw new RuntimeException("Insufficient stock for product ID: " + productId);
-            }
-            product.setStock(product.getStock() - quantity);
-            productRepository.save(product);
-            logger.info("Reduced stock for product ID: {} by quantity: {}", productId, quantity);
+        if (product.getStock() < quantity) {
+            throw new RuntimeException("Insufficient stock for product ID: " + productId);
+        }
+        product.setStock(product.getStock() - quantity);
+        productRepository.save(product);
+        logger.info("Reduced stock for product ID: {} by quantity: {}", productId, quantity);
     }
 
     private ProductResponseDTO mapToDTO(Product product) {
@@ -93,7 +93,6 @@ public class ProductService {
                 product.getStock(),
                 product.getCategory(),
                 product.getCreatedAt(),
-                product.getUpdatedAt()
-        );
+                product.getUpdatedAt());
     }
 }
