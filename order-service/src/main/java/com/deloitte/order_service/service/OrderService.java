@@ -63,7 +63,7 @@ public class OrderService {
         order.setItems(itemsToSave);
         order.setTotalPrice(totalPrice);
 
-        Order saved = OrderRepository.save(order);
+        Order saved = orderRepository.save(order);
 
         for (OrderItemRequest itemRequest : requestDTO.getItems()) {
             productFeignClient.reduceStock(
@@ -74,7 +74,7 @@ public class OrderService {
         return mapToDTO(saved);
     }
 
-    private OrderResponseDTO mapToDto(Order order) {
+    private OrderResponseDTO mapToDTO(Order order) {
         List<OrderItemResponse> itemResponses = order.getItems().stream()
                 .map(item -> new OrderItemResponse(
                         item.getId(),

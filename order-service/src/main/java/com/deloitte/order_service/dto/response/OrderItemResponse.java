@@ -14,7 +14,7 @@ public class OrderItemResponse {
     private Long id;
     private Long productId;
     private Integer quantity;
-    private Integer unitPrice;
+    private BigDecimal unitPrice;
     private BigDecimal subtotal;
 
 }
