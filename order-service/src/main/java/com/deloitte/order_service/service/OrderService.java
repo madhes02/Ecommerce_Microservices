@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.deloitte.order_service.dto.request.OrderItemRequest;
@@ -14,6 +16,7 @@ import com.deloitte.order_service.dto.response.OrderResponseDTO;
 import com.deloitte.order_service.entity.Order;
 import com.deloitte.order_service.entity.OrderItem;
 import com.deloitte.order_service.entity.OrderStatus;
+import com.deloitte.order_service.exception.ResourceNotFoundException;
 import com.deloitte.order_service.feign.ProductResponse;
 import com.deloitte.order_service.repository.OrderRepository;
 import com.deloitte.order_service.feign.ProductFeignClient;
@@ -24,10 +27,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class OrderService {
 
+        private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
+
     private final OrderRepository orderRepository;
     private final ProductFeignClient productFeignClient;
 
     public OrderResponseDTO placeOrder(OrderRequestDTO requestDTO, String username) {
+
+        logger.info("Placing order for user: {}", username);
 
         Order order = new Order();
         order.setUsername(username);
@@ -64,6 +71,7 @@ public class OrderService {
         order.setTotalPrice(totalPrice);
 
         Order saved = orderRepository.save(order);
+        logger.info("Order saved. ID: {}, Total: {}", saved.getId(), totalPrice);
 
         for (OrderItemRequest itemRequest : requestDTO.getItems()) {
             productFeignClient.reduceStock(
@@ -73,6 +81,34 @@ public class OrderService {
 
         return mapToDTO(saved);
     }
+
+    public List<OrderResponseDTO> getMyOrders(String username) {
+        return orderRepository.findByUsername(username).stream()
+        .map(this::mapToDTO)
+        .collect(Collectors.toList());
+    }
+
+    public OrderResponseDTO getOrderById(Long id) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Order not found with id: " + id
+                ));
+        return mapToDTO(order);          
+    }
+
+
+    public OrderResponseDTO updateOrderStatus(Long id, String status) {
+        Order order = orderRepository.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException(
+                "Order not found with id: " + id
+        ));
+
+        order.setStatus(OrderStatus.valueOf(status.toUpperCase()));
+        Order updated = orderRepository.save(order);
+        logger.info("Order {} status updated to: {}", id, status);
+        return mapToDTO(order);
+    }
+
 
     private OrderResponseDTO mapToDTO(Order order) {
         List<OrderItemResponse> itemResponses = order.getItems().stream()
