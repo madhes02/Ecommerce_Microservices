@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderResponse {
+public class OrderResponseDTO {
 
     private Long id;
     private String username;
