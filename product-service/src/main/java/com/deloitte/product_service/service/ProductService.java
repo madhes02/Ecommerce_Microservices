@@ -77,7 +77,7 @@ public class ProductService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with ID: " + productId));
         if (product.getStock() < quantity) {
-            throw new RuntimeException("Insufficient stock for product ID: " + productId);
+            throw new IllegalArgumentException("Insufficient stock for product ID: " + productId);
         }
         product.setStock(product.getStock() - quantity);
         productRepository.save(product);

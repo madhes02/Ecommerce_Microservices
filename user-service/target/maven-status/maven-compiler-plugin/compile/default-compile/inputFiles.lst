@@ -1,4 +1,6 @@
 /workspaces/Ecommerce_Microservices/user-service/src/main/java/com/deloitte/user_service/UserServiceApplication.java
+/workspaces/Ecommerce_Microservices/user-service/src/main/java/com/deloitte/user_service/config/AppConfig.java
+/workspaces/Ecommerce_Microservices/user-service/src/main/java/com/deloitte/user_service/config/SwaggerConfig.java
 /workspaces/Ecommerce_Microservices/user-service/src/main/java/com/deloitte/user_service/controller/AuthController.java
 /workspaces/Ecommerce_Microservices/user-service/src/main/java/com/deloitte/user_service/dto/request/LoginRequestDTO.java
 /workspaces/Ecommerce_Microservices/user-service/src/main/java/com/deloitte/user_service/dto/request/RegisterRequestDTO.java

@@ -1,4 +1,5 @@
 /workspaces/Ecommerce_Microservices/product-service/src/main/java/com/deloitte/product_service/ProductServiceApplication.java
+/workspaces/Ecommerce_Microservices/product-service/src/main/java/com/deloitte/product_service/config/SwaggerConfig.java
 /workspaces/Ecommerce_Microservices/product-service/src/main/java/com/deloitte/product_service/controller/ProductController.java
 /workspaces/Ecommerce_Microservices/product-service/src/main/java/com/deloitte/product_service/dto/request/ProductRequestDTO.java
 /workspaces/Ecommerce_Microservices/product-service/src/main/java/com/deloitte/product_service/dto/response/ProductResponseDTO.java

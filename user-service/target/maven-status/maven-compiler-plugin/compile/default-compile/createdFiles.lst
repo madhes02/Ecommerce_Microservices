@@ -1,11 +1,13 @@
 com/deloitte/user_service/security/JwtAuthFilter.class
 com/deloitte/user_service/entity/Role.class
 com/deloitte/user_service/entity/User.class
+com/deloitte/user_service/config/SwaggerConfig.class
 com/deloitte/user_service/dto/response/UserResponseDTO.class
 com/deloitte/user_service/security/JwtService.class
 com/deloitte/user_service/dto/request/LoginRequestDTO.class
 com/deloitte/user_service/exception/GlobalExceptionHandler.class
 com/deloitte/user_service/controller/AuthController.class
+com/deloitte/user_service/config/AppConfig.class
 com/deloitte/user_service/security/SecurityConfig.class
 com/deloitte/user_service/security/CustomUserDetailsService.class
 com/deloitte/user_service/exception/AuthException.class
