@@ -48,7 +48,7 @@ REQUEST COMES IN
       ▼
 USER RECEIVES: Below json
 ```
-
+## JSON:
 ``` json
 {
   "id": 1,
@@ -61,7 +61,6 @@ USER RECEIVES: Below json
   "status": "PENDING"
 }
 ```
-
 
 -----------------------------------------------------------------------------
 # Why Feign? 
@@ -89,7 +88,7 @@ public interface ProductFeignClient {
 
 You write zero HTTP code. That's the entire point of Feign.
 
-#### Product Service Response:
+#### ProductResponse — Why It Exists in Order-Service:
 ```json
 // product-service sends back this JSON:
 {
@@ -104,6 +103,7 @@ You write zero HTTP code. That's the entire point of Feign.
 
 // order-service only cares about 4 of those fields
 // so ProductResponse only has:
+
 class ProductResponse {
     Long id;
     String name;
@@ -115,44 +115,46 @@ class ProductResponse {
 
 ## FeignClientConfig — Why It Exists
 > Product-service is protected by JWT. When order-service calls product-service, that call has no Authorization header by default. Product-service will reject it with 403.
-FeignClientConfig intercepts every outgoing Feign call and says: "wait, let me grab the token from the current incoming request and attach it to this outgoing call."
+> FeignClientConfig intercepts every outgoing Feign call and says: "wait, let me grab the token from the current incoming request and attach it to this outgoing call."
 
+```text
 User → [token] → order-service
                       │
                       │ FeignClientConfig grabs that same token
                       │ and attaches it to the outgoing call
                       ▼
                product-service ← [same token] ← order-service
-
+```
 --------------------------------------------------------------------------------------------
 
-# What is a Servlet?
-
-```java
+# What Happens When a Request Hits Your Server ?
+ A Request comes from Postman: 
+```text
 Postman sends:
 GET /products
 Authorization: Bearer eyJhbGci...
 ```
 Your server receives raw bytes over the network. Someone needs to:
-
-Parse those bytes into something Java can understand
-Figure out the URL, headers, body
-Route it to the right controller method
-Send a response back
+- Parse those bytes into something Java can understand
+- Figure out the URL, headers, body
+- Route it to the right controller method
+- Send a response back
 
 That "someone" is the Servlet.
 
-A Servlet is Java's standard way of handling HTTP requests. It's been around since 1997.
+> A Servlet is Java's standard way of handling HTTP requests. It's been around since 1997.
 Think of it as a post office worker:
-
+```text
 Opens the envelope (HTTP request)
 Reads who it's addressed to (URL)
 Processes it
 Sends a reply (HTTP response)
+```
 
 Spring Boot uses an embedded Tomcat server. Tomcat IS a Servlet container — its entire job is to run Servlets
 
 When request comes in:
+```text
 HTTP Request (raw bytes)
         │
         ▼
@@ -167,15 +169,16 @@ HTTP Request (raw bytes)
    HttpServletResponse object   ← Java object you write back to
                                    setStatus(200)
                                    getWriter().write("hello")
+```                                   
 
 So HttpServletRequest and HttpServletResponse are just Java representations of the HTTP request and response
 
 ----------------------------------------------------------------------
 # What is a Filter:
 
-Before the request reaches your controller, you can intercept it. That's a Filter.
+> Before the request reaches your controller, you can intercept it. That's a Filter.
 Real world analogy — a nightclub:
-
+```text
 People trying to enter (HTTP requests)
         │
         ▼
@@ -197,10 +200,10 @@ People trying to enter (HTTP requests)
          │ passes through
          ▼
     Inside the club  ← Your Controller (the actual destination)
-
+```
 Each checkpoint is a Filter. They run in sequence. If any filter rejects the request, the request never reaches the club (your controller).
 In Spring:
-
+```text
 HTTP Request
         │
         ▼
@@ -214,15 +217,15 @@ Filter 3 (SecurityFilter)     → checks if route is allowed
         │
         ▼
 Your Controller               → actually handles the request
-
+```
 This sequence of filters is called the Filter Chain.
 
 # What is FilterChain
-FilterChain is just the object that represents "the rest of the filters after me."
+> FilterChain is just the object that represents "the rest of the filters after me."
 When your filter is done doing its job, it must call:
-
+```java
 filterChain.doFilter(request, response);
-
+```
 This means: "I'm done, pass the request to the next filter in the chain."
 If you DON'T call this — the request stops dead. It never reaches the next filter or the controller. This is how filters BLOCK requests.
 
@@ -242,7 +245,7 @@ protected void doFilterInternal(request, response, filterChain) {
 ```
 
 # What is OncePerRequestFilter
-Spring has a problem. Some filters can run multiple times per request (due to request forwarding internally). For security, you never want your JWT filter to run twice.
+> Spring has a problem. Some filters can run multiple times per request (due to request forwarding internally). For security, you never want your JWT filter to run twice.
 OncePerRequestFilter is Spring's solution — it guarantees your filter runs exactly once per HTTP request, no matter what.
 That's the only reason you extend it instead of implementing raw Filter. One guarantee, nothing else.
 
@@ -333,8 +336,8 @@ protected void doFilterInternal(
 ```
 ----------------------------------------------------
 # What is SecurityContextHolder
-This is the last mystery. Think of it as a notice board attached to the current request's thread.
-
+Think of it as a notice board attached to the current request's thread.
+```text
 Thread handling request from madhes:
 ┌─────────────────────────────────┐
 │  SecurityContext (notice board) │
@@ -344,6 +347,7 @@ Thread handling request from madhes:
 │    roles: [ROLE_USER]           │
 │    authenticated: true          │
 └─────────────────────────────────┘
+```
 JwtAuthFilter writes to this board: "madhes is authenticated."
 SecurityConfig reads from this board: "is anyone authenticated? yes → allow."
 OrderController reads from this board: "who is authenticated? madhes → use as username."
@@ -356,6 +360,7 @@ After the request is done, Spring clears this board automatically. Next request 
 ```
 
 # The full picture:
+```text
 POST /orders
 Authorization: Bearer eyJhbGci...
         │
@@ -382,3 +387,4 @@ OrderController:
         ▼
 Response sent back to user
 SecurityContext cleared for this thread
+```
