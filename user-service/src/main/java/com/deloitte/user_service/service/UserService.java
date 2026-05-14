@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.deloitte.user_service.dto.request.LoginRequestDTO;
@@ -25,6 +26,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final JwtService jwtService;
 
+    private final PasswordEncoder passwordEncoder;
+
     public String register(RegisterRequestDTO request) {
 
         if (userRepository.findByUsername(request.getUsername()).isPresent()) {
@@ -34,7 +37,7 @@ public class UserService {
         User user = new User();
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(request.getRole());
         userRepository.save(user);
 
@@ -47,7 +50,7 @@ public class UserService {
         User user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new AuthException("User not found"));
 
-        if (!user.getPassword().equals(request.getPassword())) {
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new AuthException("Invalid credentials");
         }
 
