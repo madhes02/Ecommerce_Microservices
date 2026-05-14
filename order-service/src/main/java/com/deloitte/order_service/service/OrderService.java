@@ -19,6 +19,9 @@ import com.deloitte.order_service.entity.OrderStatus;
 import com.deloitte.order_service.exception.ResourceNotFoundException;
 import com.deloitte.order_service.feign.ProductResponse;
 import com.deloitte.order_service.repository.OrderRepository;
+
+import io.micrometer.common.lang.NonNull;
+
 import com.deloitte.order_service.feign.ProductFeignClient;
 
 import lombok.RequiredArgsConstructor;
@@ -88,7 +91,7 @@ public class OrderService {
         .collect(Collectors.toList());
     }
 
-    public OrderResponseDTO getOrderById(Long id) {
+    public OrderResponseDTO getOrderById(@NonNull Long id) {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Order not found with id: " + id
@@ -97,7 +100,7 @@ public class OrderService {
     }
 
 
-    public OrderResponseDTO updateOrderStatus(Long id, String status) {
+    public OrderResponseDTO updateOrderStatus(@NonNull Long id, String status) {
         Order order = orderRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException(
                 "Order not found with id: " + id
