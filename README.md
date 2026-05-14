@@ -100,10 +100,11 @@ You write zero HTTP code. That's the entire point of Feign.
   "createdAt": "...",
   "updatedAt": "..."
 }
+```
 
-// order-service only cares about 4 of those fields
-// so ProductResponse only has:
-
+order-service only cares about 4 of those fields
+so ProductResponse only has:
+```java
 class ProductResponse {
     Long id;
     String name;
@@ -115,6 +116,7 @@ class ProductResponse {
 
 ## FeignClientConfig — Why It Exists
 > Product-service is protected by JWT. When order-service calls product-service, that call has no Authorization header by default. Product-service will reject it with 403.
+
 > FeignClientConfig intercepts every outgoing Feign call and says: "wait, let me grab the token from the current incoming request and attach it to this outgoing call."
 
 ```text
@@ -126,8 +128,8 @@ User → [token] → order-service
                product-service ← [same token] ← order-service
 ```
 --------------------------------------------------------------------------------------------
-
-# What Happens When a Request Hits Your Server ?
+# Servlet
+## What Happens When a Request Hits Your Server ?
  A Request comes from Postman: 
 ```text
 Postman sends:
@@ -246,7 +248,9 @@ protected void doFilterInternal(request, response, filterChain) {
 
 # What is OncePerRequestFilter
 > Spring has a problem. Some filters can run multiple times per request (due to request forwarding internally). For security, you never want your JWT filter to run twice.
+
 OncePerRequestFilter is Spring's solution — it guarantees your filter runs exactly once per HTTP request, no matter what.
+
 That's the only reason you extend it instead of implementing raw Filter. One guarantee, nothing else.
 
 ```java
@@ -349,7 +353,9 @@ Thread handling request from madhes:
 └─────────────────────────────────┘
 ```
 JwtAuthFilter writes to this board: "madhes is authenticated."
+
 SecurityConfig reads from this board: "is anyone authenticated? yes → allow."
+
 OrderController reads from this board: "who is authenticated? madhes → use as username."
 
 ```java
